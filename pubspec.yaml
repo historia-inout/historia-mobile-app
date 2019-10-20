@@ -12,6 +12,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   share: 0.5.2
   http: any
+  url_launcher: any
 
 dev_dependencies:
   flutter_test:
