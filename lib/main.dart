@@ -189,19 +189,15 @@ class History extends State<HistoryState>{
   }
 }
 
-class QueryScreen extends StatelessWidget{
+class QueryScreen extends StatefulWidget{
+  @override
+  QueryScreenState createState() => QueryScreenState();
+}
+
+class QueryScreenState extends State<QueryScreen>{
 
   FocusNode myFocusNode = new FocusNode();
   final queryFieldController = TextEditingController();
-
-  apiRequest(String url, Map data) async{
-    var temp = json.encode(data);
-    http.post(url, body: temp).then((response){
-      var res = response.body;
-      var result = json.decode(res.toString());
-      print(result);
-    });
-  }
 
   @override
   Widget build(BuildContext context){
@@ -216,41 +212,40 @@ class QueryScreen extends StatelessWidget{
         ),
         centerTitle: true,
       ),
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(10.0),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 18, right: 18),
-            child: TextField(
-              focusNode: myFocusNode,
-              onSubmitted: (val){
-                String queryUrl = "http://localhost:8000/query/mobile/api/";
-                Map queryData = {
-                  "query": val
-                };
-                apiRequest(queryUrl, queryData);
-              },
-              cursorColor: theme_color,
-              controller: queryFieldController,
-              autocorrect: false,
-              style: TextStyle(color: theme_color),
-              decoration: InputDecoration(
-                enabledBorder: new UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey, width: 1.0),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(10.0),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 18, right: 18),
+              child: TextField(
+                focusNode: myFocusNode,
+                onSubmitted: (val) async {
+                  print(val);
+                },
+                cursorColor: theme_color,
+                controller: queryFieldController,
+                autocorrect: false,
+                style: TextStyle(color: theme_color),
+                decoration: InputDecoration(
+                  enabledBorder: new UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                  ),
+                  focusedBorder: new UnderlineInputBorder(
+                    borderSide: BorderSide(color: theme_color, width: 1.0),
+                  ),
+                  icon: Icon(Icons.search, color: theme_color),
+                  labelText: 'Query',
+                  labelStyle: TextStyle(color: theme_color),
                 ),
-                focusedBorder: new UnderlineInputBorder(
-                  borderSide: BorderSide(color: theme_color, width: 1.0),
-                ),
-                icon: Icon(Icons.search, color: theme_color),
-                labelText: 'Query',
-                labelStyle: TextStyle(color: theme_color),
               ),
             ),
-          )
-        ],
-      ),
+            HistoryState()
+          ],
+        ),
+      )
     );
   }
 }
